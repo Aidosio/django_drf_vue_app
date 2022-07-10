@@ -1,11 +1,10 @@
 <template>
   <div class="filter">
-    <input type="text" v-model="search">
+    <input type="text" v-model="search" placeholder="Найдите свой пост">
   </div>
-  <a-filter-category v-model="selected" :options="categorys" />
 
   <h1 v-if="blogs.length === 0">У вас пока нет постов</h1>
-  <div v-else class="post" v-for="blog in blogs" :key="blog.id">
+  <div v-else class="post" v-for="blog in blogByTitle" :key="blog.id">
     <h2>{{ blog.name }}</h2>
     <div v-for="category in categorys" :key="category.id">
       <h3 v-if="category.id === blog.category">категория: {{ category.name }} </h3>
@@ -44,18 +43,14 @@
 
 <script>
 import axios from "axios";
-import AFilterCategory from "@/ui/a-filter-category";
 
 export default {
   name: "sectionPost",
-  components: {AFilterCategory},
   data() {
     return {
       blogs: [],
       categorys: [],
       search: '',
-      selected: '',
-      blogSearch: {}
     }
   },
 
@@ -75,26 +70,6 @@ export default {
           item.name.indexOf(this.search) !== -1
       )
     },
-  },
-
-  watch: {
-    selected() {
-      // this.blogs.forEach(item => {
-      //   item.category.sort((a, b) => {
-      //     return a[this.selected]?.localeCompare(b[newValue])
-      //   })
-      // })
-
-      return this.blogs.slice().sort(function(a, b){
-        return (a.category > b.category) ? 1 : -1;
-      });
-
-      // this.blogs.sort((a, b) => {
-      //   return a[this.selected]?.localeCompare(b[newValue])
-      // })
-      // console.log(this.blogByTitle[0].category, newValue)
-    },
-
   },
 
   methods: {
@@ -147,6 +122,22 @@ p {
 
 button {
   margin-right: 10px;
+}
+
+.filter input {
+  width: 100%;
+  padding: 10px 5px;
+  border: none;
+  border-bottom: 2px solid #034159;
+  color: #090909;
+  outline: none;
+  transition: 0.2s ease;
+  margin: 15px 0px;
+}
+
+.filter input:focus {
+  font-size: 20px;
+  padding: 20px 5px;
 }
 
 </style>
